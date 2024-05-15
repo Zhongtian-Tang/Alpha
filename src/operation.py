@@ -428,3 +428,95 @@ class Operation:
         res = dax.rolling(date=window_size, min_periods=minobs).min().to_numpy()
         return res
     
+    @classmethod
+    def rolling_argmax(
+        cls, xmatrix: npt.NDArray[Any], window_size: int, minobs: int = 1
+    ) -> npt.NDArray[Any]:
+        """Calculate the index of the maximum value whitin the window period.
+
+        This method utilizes the ``xarray`` library to handle the rolling window computation. It first converts the input array to an ``xarray.DataArray`` with dimensions ``date`` and ``ticker``. Then calculates the rolling maximum across the ``date`` dimension, requiring a minimum number of observations as specified by ``minobs``.
+
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        window_size : int
+            The size of the rolling window.
+        minobs : int, optional
+            The minimum number of observations required for each window. By default 1.
+        
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the rolling argmax values applied
+        
+        Examples
+        ----------
+        >>> import numpy as np
+        >>> xmatrix = np.array([[1, 2, 3], [np.nan, 5, np.nan], [7, 8, 9], [10, 11, 12]])
+        >>> window_size = 2
+        >>> Operation.rolling_argmax(xmatrix, window_size)
+        array([[ 0.,  0.,  0.],
+               [ 1.,  0.,  1.],
+               [ 0.,  0.,  0.],
+               [ 0.,  0.,  0.]])
+        
+        >>> xmatrix = np.array([[np.nan, np.nan, np.nan], [4, np.nan, 6], [7, 8, 9], [10, 11, 12]])
+        >>> window_size = 3
+        >>> minobs = 2
+        >>> Operation.rolling_argmax(xmatrix, window_size, minobs)
+        array([[nan, nan, nan],
+               [nan, nan, nan],
+               [ 2., nan,  2.],
+               [ 2.,  2.,  2.]])
+        """
+
+        dax = xr.DataArray(xmatrix, dims=["date", "ticker"])
+        return dax.rolling(date=window_size, min_periods=minobs).argmax().to_numpy()
+    
+    @classmethod
+    def rolling_argmin(
+        cls, xmatrix: npt.NDArray[Any], window_size: int, minobs: int = 1
+    ) -> npt.NDArray[Any]:
+        """Calculate the index of the minimum value whitin the window period
+
+        This method utilizes the ``xarray`` library to handle the rolling window computation. It first converts the input array to an ``xarray.DataArray`` with dimensions ``date`` and ``ticker``. Then calculates the rolling maximum across the ``date`` dimension, requiring a minimum number of observations as specified by ``minobs``.
+
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        window_size : int
+            The size of the rolling window.
+        minobs : int, optional
+            The minimum number of observations required for each window. By default 1.
+        
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the rolling argmin values applied
+        
+        Examples
+        ----------
+        >>> import numpy as np
+        >>> xmatrix = np.array([[1, 2, 3], [np.nan, 5, np.nan], [7, 8, 9], [10, 11, 12]])
+        >>> window_size = 2
+        >>> Operation.rolling_argmin(xmatrix, window_size)
+        array([[ 1.,  1.,  1.],
+               [ 0.,  0.,  0.],
+               [ 1.,  0.,  1.],
+               [ 0.,  0.,  0.]])
+        
+        >>> xmatrix = np.array([[np.nan, np.nan, np.nan], [4, np.nan, 6], [7, 8, 9], [10, 11, 12]])
+        >>> window_size = 3
+        >>> minobs = 2
+        >>> Operation.rolling_argmin(xmatrix, window_size, minobs)
+        array([[nan, nan, nan],
+               [nan, nan, nan],
+               [ 1., nan,  1.],
+               [ 0.,  1.,  0.]])
+
+        """
+        dax = xr.DataArray(xmatrix, dims=["date", "ticker"])
+        return dax.rolling(date=window_size, min_periods=minobs).argmin().to_numpy()
+    
