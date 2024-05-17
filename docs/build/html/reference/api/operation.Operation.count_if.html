@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html lang="python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>operation.Operation.count_if &#8212; Alpha 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="operation.Operation.sum_if" href="operation.Operation.sum_if.html" />
+    <link rel="prev" title="operation.Operation.rolling_rank" href="operation.Operation.rolling_rank.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="operation-operation-count-if">
+<h1>operation.Operation.count_if<a class="headerlink" href="#operation-operation-count-if" title="Permalink to this heading">¶</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="operation.Operation.count_if">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Operation.</span></span><span class="sig-name descname"><span class="pre">count_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">bool_</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#operation.Operation.count_if" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the count that satisfies the condition within the window period.</p>
+<p>The condition is a boolean matrix, which is the same shape as the input matrix. This method calculates the number of <code class="docutils literal notranslate"><span class="pre">True</span></code> values in a rolling window of the specified size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>condition</strong> (<em>array_like</em>) -- The boolean matrix that represents the condition.</p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) -- The size of the rolling window.</p></li>
+<li><p><strong>minobs</strong> (<em>int</em><em>, </em><em>optional</em>) -- The minimum number of observations required for each window. By default 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resulting numpy array with the count values applied</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Alpha</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../operation.html">Operation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation._mulvar_helper.html">operation.Operation._mulvar_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.log.html">operation.Operation.log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.scale.html">operation.Operation.scale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.signed_power.html">operation.Operation.signed_power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.shift.html">operation.Operation.shift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.diff.html">operation.Operation.diff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.add_log.html">operation.Operation.add_log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.sub_log.html">operation.Operation.sub_log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_max.html">operation.Operation.rolling_max</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_min.html">operation.Operation.rolling_min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_argmax.html">operation.Operation.rolling_argmax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_argmin.html">operation.Operation.rolling_argmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_to_max.html">operation.Operation.rolling_to_max</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_to_min.html">operation.Operation.rolling_to_min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_mean.html">operation.Operation.rolling_mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_sum.html">operation.Operation.rolling_sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_median.html">operation.Operation.rolling_median</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_std.html">operation.Operation.rolling_std</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_var.html">operation.Operation.rolling_var</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_prod.html">operation.Operation.rolling_prod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.rolling_rank.html">operation.Operation.rolling_rank</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">operation.Operation.count_if</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.sum_if.html">operation.Operation.sum_if</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.skew.html">operation.Operation.skew</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.kurt.html">operation.Operation.kurt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.co_skew.html">operation.Operation.co_skew</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.co_kurt.html">operation.Operation.co_kurt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.cov.html">operation.Operation.cov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.corr.html">operation.Operation.corr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.linear_decay.html">operation.Operation.linear_decay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.linear_regression.html">operation.Operation.linear_regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.cs_rank.html">operation.Operation.cs_rank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.cs_mean_spilt.html">operation.Operation.cs_mean_spilt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.Operation.cs_reg_resi.html">operation.Operation.cs_reg_resi</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../operation.html">Operation</a><ul>
+      <li>Previous: <a href="operation.Operation.rolling_rank.html" title="previous chapter">operation.Operation.rolling_rank</a></li>
+      <li>Next: <a href="operation.Operation.sum_if.html" title="next chapter">operation.Operation.sum_if</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Zhongtian Tang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/reference/api/operation.Operation.count_if.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

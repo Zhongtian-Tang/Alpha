@@ -96,8 +96,95 @@
 <tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_min.html#operation.Operation.rolling_min" title="operation.Operation.rolling_min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_min</span></code></a>(xmatrix, window_size)</p></td>
 <td><p>Calculate the rolling minimum of the input array.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_argmax.html#operation.Operation.rolling_argmax" title="operation.Operation.rolling_argmax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_argmax</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the index of the maximum value whitin the window period.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_argmin.html#operation.Operation.rolling_argmin" title="operation.Operation.rolling_argmin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_argmin</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the index of the minimum value whitin the window period</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_to_max.html#operation.Operation.rolling_to_max" title="operation.Operation.rolling_to_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_to_max</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the number of intervals between the current value and the maximum value within the window period.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_to_min.html#operation.Operation.rolling_to_min" title="operation.Operation.rolling_to_min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_to_min</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the number of intervals between the current value and the minimum value within the window period.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_mean.html#operation.Operation.rolling_mean" title="operation.Operation.rolling_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_mean</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling mean.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_sum.html#operation.Operation.rolling_sum" title="operation.Operation.rolling_sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_sum</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling sum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_median.html#operation.Operation.rolling_median" title="operation.Operation.rolling_median"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_median</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling median.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_std.html#operation.Operation.rolling_std" title="operation.Operation.rolling_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_std</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling standard deviation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_var.html#operation.Operation.rolling_var" title="operation.Operation.rolling_var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_var</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling weighted window variance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.rolling_prod.html#operation.Operation.rolling_prod" title="operation.Operation.rolling_prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_prod</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling product.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.rolling_rank.html#operation.Operation.rolling_rank" title="operation.Operation.rolling_rank"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.rolling_rank</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the rolling rank along date axis</p></td>
+</tr>
 </tbody>
 </table>
+</section>
+<section id="statistics-operations">
+<h2>Statistics operations<a class="headerlink" href="#statistics-operations" title="Permalink to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.count_if.html#operation.Operation.count_if" title="operation.Operation.count_if"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.count_if</span></code></a>(condition, window_size[, ...])</p></td>
+<td><p>Calculate the count that satisfies the condition within the window period.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.sum_if.html#operation.Operation.sum_if" title="operation.Operation.sum_if"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.sum_if</span></code></a>(xmatrix, condition, window_size)</p></td>
+<td><p>Calculate the sum of values that satisfy the condition within the window period.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.skew.html#operation.Operation.skew" title="operation.Operation.skew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.skew</span></code></a>(xmatrix, window_size[, minobs])</p></td>
+<td><p>Calculate the rolling unbiased skewness.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.kurt.html#operation.Operation.kurt" title="operation.Operation.kurt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.kurt</span></code></a>(xmatrix, window_size[, minobs])</p></td>
+<td><p>Calculate the rolling Fisher's definition of kurtosis with bias</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.co_skew.html#operation.Operation.co_skew" title="operation.Operation.co_skew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.co_skew</span></code></a>(xmatrix, ymatrix, window_size)</p></td>
+<td><p>Calculate the rolling co-skewness.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.co_kurt.html#operation.Operation.co_kurt" title="operation.Operation.co_kurt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.co_kurt</span></code></a>(xmatrix, ymatrix, window_size)</p></td>
+<td><p>Calculate the rolling co-kurtosis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.cov.html#operation.Operation.cov" title="operation.Operation.cov"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.cov</span></code></a>(xmatrix, ymatrix, window_size)</p></td>
+<td><p>Calculate the rolling sample covariance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.corr.html#operation.Operation.corr" title="operation.Operation.corr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.corr</span></code></a>(xmatrix, ymatrix, window_size)</p></td>
+<td><p>Calculate the rolling correlation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.linear_decay.html#operation.Operation.linear_decay" title="operation.Operation.linear_decay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.linear_decay</span></code></a>(xmatrix, window_size)</p></td>
+<td><p>Calculate the wma (weighted moving average) of the input matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.linear_regression.html#operation.Operation.linear_regression" title="operation.Operation.linear_regression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.linear_regression</span></code></a>(xmatrix, ...[, ...])</p></td>
+<td><p>Calculate the uni-variate linear regression of feature and target matrix.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cross-sectional-operations">
+<h2>Cross-sectional operations<a class="headerlink" href="#cross-sectional-operations" title="Permalink to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.cs_rank.html#operation.Operation.cs_rank" title="operation.Operation.cs_rank"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.cs_rank</span></code></a>(xmatrix[, pct])</p></td>
+<td><p>Compute numerical data ranks along section axis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/operation.Operation.cs_mean_spilt.html#operation.Operation.cs_mean_spilt" title="operation.Operation.cs_mean_spilt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.cs_mean_spilt</span></code></a>(xmatrix)</p></td>
+<td><p>Divide into two groups based on the mean value of the input matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/operation.Operation.cs_reg_resi.html#operation.Operation.cs_reg_resi" title="operation.Operation.cs_reg_resi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Operation.cs_reg_resi</span></code></a>(xmatrix, ymatrix)</p></td>
+<td><p>Calculate the residual of cross section regression(including intercept).</p></td>
+</tr>
+</tbody>
+</table>
+<p>&quot;&quot;&quot;</p>
 </section>
 </section>
 
@@ -130,6 +217,30 @@
 <li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.sub_log.html">operation.Operation.sub_log</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_max.html">operation.Operation.rolling_max</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_min.html">operation.Operation.rolling_min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_argmax.html">operation.Operation.rolling_argmax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_argmin.html">operation.Operation.rolling_argmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_to_max.html">operation.Operation.rolling_to_max</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_to_min.html">operation.Operation.rolling_to_min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_mean.html">operation.Operation.rolling_mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_sum.html">operation.Operation.rolling_sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_median.html">operation.Operation.rolling_median</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_std.html">operation.Operation.rolling_std</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_var.html">operation.Operation.rolling_var</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_prod.html">operation.Operation.rolling_prod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.rolling_rank.html">operation.Operation.rolling_rank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.count_if.html">operation.Operation.count_if</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.sum_if.html">operation.Operation.sum_if</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.skew.html">operation.Operation.skew</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.kurt.html">operation.Operation.kurt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.co_skew.html">operation.Operation.co_skew</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.co_kurt.html">operation.Operation.co_kurt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.cov.html">operation.Operation.cov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.corr.html">operation.Operation.corr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.linear_decay.html">operation.Operation.linear_decay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.linear_regression.html">operation.Operation.linear_regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.cs_rank.html">operation.Operation.cs_rank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.cs_mean_spilt.html">operation.Operation.cs_mean_spilt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operation.Operation.cs_reg_resi.html">operation.Operation.cs_reg_resi</a></li>
 </ul>
 </li>
 </ul>

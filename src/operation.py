@@ -632,64 +632,73 @@ class Operation:
     def rolling_mean(
         cls, xmatrix: npt.NDArray[Any], window_size: int, minobs: int = 1
     ) -> npt.NDArray[Any]:
-        """Calculate the rolling mean of the input array.
+        """Calculate the rolling mean.
 
-        This method utilizes the ``xarray`` library to handle the rolling window computation. It first converts the input array to an ``xarray.DataArray`` with dimensions ``date`` and ``ticker``. Then calculates the rolling mean across the ``date`` dimension, requiring a minimum number of observations as specified by ``minobs``.
+        This method utilizes the ``xarray`` library to handle the rolling window computation. It first converts the input array into an ``xarray.DataArray`` with named dimensions ``date`` and ``ticker``. It then calculates the rolling mean across the ``date`` dimension, requiring a minimum number of observations as specified by ``minobs``.
 
         Parameters
         ----------
         xmatrix : array_like
-            The input matrix x.
+            The input matrix.
         window_size : int
-            The size of the rolling window.
+            Size of the moving window.
         minobs : int, optional
-            The minimum number of observations required for each window. By default 1.
-        
+            Minimum number of observations in window required to have a value; otherwise, result is ``np.nan``. By default 1.
+
         Returns
-        ----------
+        -------
         ndarray
-            The rolling mean of the input array.
-        
+            The resulting numpy array with the rolling mean values applied.
+
+        See Also
+        --------
+        pandas.core.window.rolling.Rolling.mean : Pandas equivalent method.
+        xarray.core.rolling.DataArrayRolling.mean : Reduce data windows by applying `mean` along specified dimension.
+        xarray.core.rolling.DataArrayRolling : Xarray base class for rolling window operations.
+
         Examples
-        ----------
+        --------
         >>> import numpy as np
         >>> xmatrix = np.array([[1, 2, 3], [np.nan, 5, np.nan], [7, 8, 9], [10, 11, 12]])
         >>> window_size = 2
         >>> Operation.rolling_mean(xmatrix, window_size)
-        array([[ 1.,  2.,  3.],
-               [ 1.,  3.5,  3. ],
-               [ 7.,  6.5,  9. ],
+        array([[ 1. ,  2. ,  3. ],
+               [ 1. ,  3.5,  3. ],
+               [ 7. ,  6.5,  9. ],
                [ 8.5,  9.5, 10.5]])
-        
+
         >>> xmatrix = np.array([[np.nan, np.nan, np.nan], [4, np.nan, 6], [7, 8, 9], [10, 11, 12]])
         >>> window_size = 3
         >>> minobs = 2
         >>> Operation.rolling_mean(xmatrix, window_size, minobs)
         array([[nan, nan, nan],
                [nan, nan, nan],
-               [ 5.5., nan,  7.5],
-               [ 7.,  9.5, 10.]])
-        
+               [5.5, nan, 7.5],
+               [7. , 9.5, 9. ]])
+        """
+        # ? basic numpy method: cant define minobs(all rows less than window_size will be set to nan)
+        """
         .. note::
-            Method 1 -use numpy:
+
+            Method 1 - use numpy:
+
             .. code-block:: python
 
                 res = np.full_like(xmatrix, np.nan)
                 roll_mean = np.lib.stride_tricks.sliding_window_view(
-                    xmatrix, window_size, axis=0).mean(axis=1)
-                res[window_size-1:] = roll_mean
+                    xmatrix, window_size, axis=0).mean(axis=-1)
+                res[window_size - 1 :] = roll_mean
                 return res
-            
-            Method 2 -use bottleneck:
+
+            Method 2 - use bottleneck:
             Lower performance than xarray.
 
             .. code-block:: python
 
-                bn.move_mean(xmatrix, window=window_size, min_count=minobs, axis=0)    
+                bn.move_mean(xmatrix, window_size, minobs, axis=0)
         """
-        dax = xr.DataArray(xmatrix, dims=["date", "ticker"])
-        res = dax.rolling(date=window_size, min_periods=minobs).mean().to_numpy()
-        return res
+        dax = xr.DataArray(xmatrix, dims=("date", "ticker"))
+        return dax.rolling(date=window_size, min_periods=minobs).mean().to_numpy()
     
     @classmethod
     def rolling_sum(
@@ -742,7 +751,7 @@ class Operation:
         return window_size * Operation.rolling_mean(xmatrix, window_size, minobs)
     
     @classmethod
-    def roll_median(
+    def rolling_median(
         cls, xmatrix: npt.NDArray[Any], window_size: int, minobs: int = 1
     ) -> npt.NDArray[Any]:
         """Calculate the rolling median.
@@ -1267,7 +1276,7 @@ class Operation:
         return numerator / denominator
     
     @classmethod
-    def cs_mean_spilt(cls, xmatrix: npt.NDArray[Any]) -> npt.NDArray[np.int]:
+    def cs_mean_spilt(cls, xmatrix: npt.NDArray[Any]) -> npt.NDArray[np.int_]:
         """Divide into two groups based on the mean value of the input matrix.
 
         Compare the value of each element with the mean value of the cross section. If the value is greater than the mean value, the value is 1; otherwise, it is -1.

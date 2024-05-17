@@ -43,3 +43,43 @@ Rolling window operations
 
    Operation.rolling_max
    Operation.rolling_min
+   Operation.rolling_argmax
+   Operation.rolling_argmin
+   Operation.rolling_to_max
+   Operation.rolling_to_min
+   Operation.rolling_mean
+   Operation.rolling_sum
+   Operation.rolling_median
+   Operation.rolling_std
+   Operation.rolling_var
+   Operation.rolling_prod
+   Operation.rolling_rank
+
+Statistics operations
+------------------------
+.. autosummary::
+   :toctree: api/
+
+   Operation.count_if
+   Operation.sum_if
+   Operation.skew
+   Operation.kurt
+   Operation.co_skew
+   Operation.co_kurt
+   Operation.cov
+   Operation.corr
+   Operation.linear_decay
+   Operation.linear_regression
+
+Cross-sectional operations
+------------------------
+.. autosummary:: 
+   :toctree: api/
+
+   Operation.cs_rank
+   Operation.cs_mean_spilt
+   Operation.cs_reg_resi
+
+"""
+
+

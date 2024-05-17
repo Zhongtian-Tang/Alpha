@@ -3,9 +3,10 @@
    contain the root `toctree` directive.
 
 Welcome to Alpha documentation
-*************************
-Alpha documentation 📈
-*************************
+------------------------------
+********************************
+      Alpha documentation 📈
+********************************
 
 .. image:: https://img.shields.io/badge/python-3.12-%231183c4
    :target: https://www.python.org/downloads/release/python-3111/
