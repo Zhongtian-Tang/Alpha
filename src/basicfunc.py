@@ -41,14 +41,14 @@ def update_datelist(begT, endT, dback=0, dnext=0):
 
     beg_index = len(trading_days[trading_days < int(begT)]) - dback
     end_index = len(trading_days[trading_days <= int(endT)]) + dnext
-    np.save('../data/cache/BASEDATA/traingdays.npy', trading_days[beg_index:end_index])
+    np.save('../data/cache/BASEDATA/tradingdays.npy', trading_days[beg_index:end_index])
     return 0
 
 def get_datelist(begT, endT, dback=0, dnext=0):
     """Get the date list based on the beginning and ending dates
     """
-    if os.path.exists('../data/cache/BASEDATA/traingdays.npy'):
-        trading_days = np.load('../data/cache/BASEDATA/traingdays.npy')
+    if os.path.exists('../data/cache/BASEDATA/tradingdays.npy'):
+        trading_days = np.load('../data/cache/BASEDATA/tradingdays.npy')
         beg_index = len(trading_days[trading_days < int(begT)]) - dback
         end_index = len(trading_days[trading_days <= int(endT)]) + dnext
         if end_index <= len(trading_days):
@@ -65,7 +65,8 @@ def get_datelist(begT, endT, dback=0, dnext=0):
         ORDER BY TradingDate
         """
     date_list = pd.read_sql(sql, engine)
-    trading_days = date_list['tradingdate'].unique().astype(str).replace('-', '', regex=True).astype(int)
+    date_list['tradingdate'] = date_list['tradingdate'].unique().astype(str)
+    trading_days = date_list['tradingdate'].replace('-', '', regex=True).astype(int)
 
     beg_index = len(trading_days[trading_days < int(begT)]) - dback
     end_index = len(trading_days[trading_days <= int(endT)]) + dnext
