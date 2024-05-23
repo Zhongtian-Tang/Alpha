@@ -1449,5 +1449,74 @@ class Operation:
         else:
             return beta
         
-        
+    @classmethod
+    def indneu_di(cls, group, xlist):
+        # keys = pd.Series(group).dropna().unique()
+        keys = np.unique(group[~np.isnan(group)])
+        for gg in keys:
+            xlist[group == gg] = xlist[group == gg] - np.nanmean(xlist[group == gg])
+        xlist[np.isnan(group)] = np.nan
+
+        return xlist
     
+    @classmethod
+    def ind_neutralize(
+        cls, xmatrix: npt.NDArray[Any], groupmatrix: npt.NDArray[Any] = np.empty((0,))
+    ) -> npt.NDArray[Any]:
+        """Neutralize the matirx by industry group.
+
+        When the method is called implicitly by setting ``self.ind_neu`` to ``True``, the input matrix is neutralized by ``WIND01``.
+        Otherwise, the input matrix is neutralized by the user-defined group.
+
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        groupmatrix : array_like, optional
+            The industry group matrix. By default np.empty((0,)).
+
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the industry neutralized values applied
+        """
+        # if groupmatrix == []
+        if groupmatrix.size == 0:
+            xmatrix = (xmatrix.T - np.nanmean(xmatrix, axis=1)).T
+            return xmatrix
+        
+        for di in range(xmatrix.shape[0]):
+            xmatrix[di] = Operation.indneu_di(groupmatrix[di], xmatrix[di])
+        return xmatrix
+    
+    @classmethod
+    def fillna(
+        cls,
+        xmatrix: npt.NDArray[Any],
+        fillna_val: Optional[Union[int, float]] = 0.0,
+        fillpinf: Optional[Union[int, float]] = None,
+        fillninf: Optional[Union[int, float]] = None,
+    ) -> npt.NDArray[Any]:
+        """Fill ``NaN/PINF/NINF`` values using the specified method.
+
+        Replace ``NaN`` with zero and ``Inf`` with large finite numbers ()
+
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        fillna_val : int or float, optional
+            The value to fill the missing values. By default 0.0.
+        fillpinf : int or float, optional
+            The value to fill the positive infinity values. By default None.
+        fillninf : int or float, optional
+            The value to fill the negative infinity values. By default None.
+        
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the filled values applied
+        """
+        return np.nan_to_num(
+            xmatrix, nan=fillna_val, posinf=fillpinf, neginf=fillninf
+        )

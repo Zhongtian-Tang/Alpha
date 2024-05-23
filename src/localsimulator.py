@@ -44,10 +44,10 @@ class Simulator:
 
         return alpha_res
     
-    def keepzdt(self, alpha, startdi, enddi, iszt, isdt):
+    def keepzdt(self, alpha, startdi, enddi, ifsuspend):
         """Decide whether to drop the stocks stop trading
         """
-        iszdt = iszt + isdt
+        iszdt = ifsuspend
 
         # If the stock is not trading, set the alpha to nan 
         alpha[0][iszdt[startdi] == 1] = np.nan

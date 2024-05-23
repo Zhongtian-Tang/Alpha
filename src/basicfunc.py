@@ -138,16 +138,16 @@ def loadcache(startdate, enddate, dataitem, source='BASEDATA'):
     if source != "" and not source.endswith("/"):
         source += "/"
     years = np.arange(int(startdate) // 10000, int(enddate) // 10000 + 1)
-    instruments = len(np.load(newpath + "BASEDATA/" + str(years[-1]) + '/STOCKS.npy'))
+    instruments = len(np.load(newpath + "BASEDATA/" + str(years[-1]) + '/STOCKS.npy', allow_pickle=True))
     
     if dataitem == "STOCKS":
-        return np.load(newpath + source + str(years[-1]) + '/' + dataitem + '.npy')
+        return np.load(newpath + source + str(years[-1]) + '/' + dataitem + '.npy', allow_pickle=True)
     
     alldata = []
     baseoffsets = 0
     for yr in range(len(years)):
         year = years[yr]
-        data = np.load(newpath + source + str(year) + "/" + dataitem + '.npy')
+        data = np.load(newpath + source + str(year) + "/" + dataitem + '.npy', allow_pickle=True)
         if data.ndim == 1:
             alldata.append(data)
         elif data.ndim == 2:
