@@ -1449,6 +1449,192 @@ class Operation:
         else:
             return beta
         
+    """Sub-methods of linear regression"""
+    
+    @classmethod
+    def reg_alpha(
+        cls, xmatrix: npt.NDArray[Any], ymatrix: npt.NDArray[Any], window_size: int,
+    ) -> npt.NDArray[Any]:
+        """Derived method of linear regression, calculate the `intercept` of the linear regression.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The features matrix x.
+        ymatrix : array_like
+            The traget matrix y.
+        window_size : int
+            Size of the rolling window.
+        
+        Returns
+        ----------
+        ndarray
+            The intercept of the linear regression.
+        """
+        alpha, _ = Operation.linear_regression(
+            xmatrix=xmatrix, ymatrix=ymatrix, window_size=window_size, calc_alpha=True
+        )
+        return alpha 
+        
+    @classmethod
+    def reg_beta(
+        cls, xmatrix: npt.NDArray[Any], ymatrix: npt.NDArray[Any], window_size: int,
+    ) -> npt.NDArray[Any]:
+        """Derived method of linear regression, calculate the `slope` of the linear regression.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The features matrix x.
+        ymatrix : array_like
+            The traget matrix y.
+        window_size : int
+            Size of the rolling window.
+        
+        Returns
+        ----------
+        ndarray
+            The slope of the linear regression.
+        """
+        res = Operation.linear_regression(
+            xmatrix=xmatrix, ymatrix=ymatrix, window_size=window_size,
+        )
+        return res
+    
+    @classmethod
+    def reg_sigma(
+        cls, xmatrix: npt.NDArray[Any], ymatrix: npt.NDArray[Any], window_size: int,
+    ) -> npt.NDArray[Any]:
+        """Derived method of linear regression, calculate the `residual sum of squares` of the linear regression.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The features matrix x.
+        ymatrix : array_like
+            The traget matrix y.
+        window_size : int
+            Size of the rolling window.
+        
+        Returns
+        ----------
+        ndarray
+            The residual sum of squares of the linear regression.
+        """
+        _, _, sigma = Operation.linear_regression(
+            xmatrix=xmatrix, ymatrix=ymatrix, window_size=window_size, calc_alpha=True, calc_sigma=True
+        )
+        return sigma
+
+    @classmethod
+    def reg_resi(
+        cls, xmatrix: npt.NDArray[Any], ymatrix: npt.NDArray[Any], window_size: int,
+    ) -> npt.NDArray[Any]:
+        """Derived method of linear regression, calculate the `residual` of the linear regression.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The features matrix x.
+        ymatrix : array_like
+            The traget matrix y.
+        window_size : int
+            Size of the rolling window.
+        
+        Returns
+        ----------
+        ndarray
+            The residual of the linear regression.
+        """
+        alpha, beta = Operation.linear_regression(
+            xmatrix=xmatrix, ymatrix=ymatrix, window_size=window_size, calc_alpha=True
+        )
+        res = ymatrix - alpha - beta * xmatrix
+        return res
+    
+    """ * Data Processing Methods * """
+    @classmethod
+    def zscore(cls, xmatrix: npt.NDArray[Any]) -> npt.NDArray[Any]:
+        """Calculate the z-score of the input matrix.
+
+        The z-score is the number of standard deviations by which the value of an observation or data point is above the mean value of what is being observed or measured.
+
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the z-score values applied
+        """
+        xmatrix = (
+            (xmatrix.T - np.nanmean(xmatrix, axis=1)) / np.nanstd(xmatrix, axis=1)
+        ).T
+        return xmatrix
+    
+    @classmethod
+    def winsorize_di(cls, xlist, r=6.0):
+        std = np.nanstd(np.array(xlist))
+        mean = np.nanmean(np.array(xlist))
+        upper = std * r + mean
+        lower = mean - std * r
+        xlist[xlist > upper] = upper
+        xlist[xlist < lower] = lower
+        return xlist
+    
+    @classmethod
+    def winsorize(cls, xmatrix: npt.NDArray[Any], r: float = 4.0) -> npt.NDArray[Any]:
+        """Winsorize the matrix by the maximum percentage.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x.
+        r : float, optional
+            The maximum percentage. By default 4.0.
+
+        Returns
+        ----------
+        ndarray
+            The resulting numpy array with the winsorized values applied
+        """
+        for di in range(xmatrix.shape[0]):
+            xmatrix[di] = Operation.winsorize_di(xmatrix[di], r)
+        return xmatrix
+    
+    @classmethod
+    def truncate_di(cls, xlist, maxpercent):
+        # if flag == False:
+        ml = np.nansum(xlist[xlist > 0]) * maxpercent
+        ms = np.nansum(xlist[xlist < 0]) * maxpercent
+        xlist[xlist > ml] = ml
+        xlist[xlist < ms] = ms
+        return xlist
+    
+    @classmethod
+    def truncate(
+        cls, xmatrix: npt.NDArray[Any], maxpercent: float = 0.06
+    ) -> npt.NDArray[Any]:
+        """Truncate the matrix by the maximum percentage.
+        
+        Parameters
+        ----------
+        xmatrix : array_like
+            The input matrix x
+        maxpercent: float, optional
+            The maximum percentage. By default 0.06.
+        
+        Returns
+        ----------
+        ndarray :
+            The truncated matrix.
+        """
+        for di in range(xmatrix.shape[0]):
+            xmatrix[di] = Operation.truncate_di(xmatrix[di], maxpercent)
+        return xmatrix
+    
     @classmethod
     def indneu_di(cls, group, xlist):
         # keys = pd.Series(group).dropna().unique()
