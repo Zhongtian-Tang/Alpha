@@ -16,7 +16,7 @@ class Generator():
         self.years = np.arange(int(startdate) // 10000, int(enddate) // 10000 + 1)
         self.base_data_list = [
             "ASHARE", "CAP", "OPEN", "HIGH", "LOW", "CLOSE", "VWAP",\
-            "VWAPRET", "VOL", "ISZT", "ISTP", "WIND01", "DAYS", "STOCKS" 
+            "VWAPRET", "VOL", "ISZT", "ISTP", "WIND01", "DAYS", "STOCKS", "IRE500" 
         ]
           
     
@@ -75,6 +75,7 @@ class Generator():
                                            unique()).astype(str).str.\
                                            replace('-','').astype(int).values
         base_data_dict['STOCKS'] = np.array(dailydata['wind_code'].unique())
+        base_data_dict['IRE500'] = indexdata[indexdata['wind_code'] == '000001.SH']['closeprice']
 
         return base_data_dict
 

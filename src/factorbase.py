@@ -24,6 +24,7 @@ from operation import Operation
 
 
 class FactorBase:
+
     def __init__(self):
         self.delay = 1
         self.histdays = 10 # need histdays >= delay, ensure that data from startdate to histdays is loaded at least once
@@ -89,7 +90,7 @@ class FactorBase:
         
         logging.info(f"{method.capitalize()} applied.")
 
-    def get_cosntants(self):
+    def get_constants(self):
         """Generate constants for alpha calculation.
 
         Get days, tickers, etc. using `basicfunc` functions.
@@ -147,7 +148,7 @@ class FactorBase:
         sub_methods_list = [name for name, _ in subclass_methods]
 
         """ Traversal alphas in base class `FactorBase`"""
-        baseclass_methods = inspect.getmembers(FactorBase, predicate=inspect.ismethod)
+        baseclass_methods = inspect.getmembers(FactorBase, predicate=inspect.isfunction)
         base_methods_list = [name for name, _ in baseclass_methods]
         
         """Get unique method defined in `FactorPool.py`"""
@@ -165,14 +166,15 @@ class FactorBase:
             [self.alpha_num, self.enddi - self.startdi + 1, self.tickers],
             np.nan
             )
-        
+
         """ Traversal alphas in `alpha_list`"""
         for i in range(self.alpha_num):
             alpha_method = getattr(self, self.alpha_list[i], None)
             if alpha_method is not None and callable(alpha_method):
-                """ Set values in corresponding places."""
-                self.alpha[i] = alpha_method()
-        
+                """Set value in corresponding places."""
+                temp_data = alpha_method()
+                self.alpha[i] = temp_data.copy()
+
         logging.info("Alphas calculated.")
 
         """ Apply data preprocessing methods to alpha ndarray"""
@@ -204,7 +206,7 @@ class FactorBase:
         pnlpath = Path(self.path)
         pnlpath.mkdir(parents=True, exist_ok=True)
         pnlpath_ret = (
-            f"{self.path} / {'PNL' if self.prefix == '' else f'{self.prefix}_PNL'}"
+            f"{self.path}/{'PNL' if self.prefix == '' else f'{self.prefix}_PNL'}"
         )
 
         """ Generate pnl related files for each alpha."""
@@ -267,7 +269,7 @@ class FactorBase:
         self.path = path
         
         """Prepare base data."""
-        self.get_cosntants()
+        self.get_constants()
         self.load_data()
         logging.info("Base data loaded.")
         

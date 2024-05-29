@@ -44,10 +44,10 @@ class Simulator:
 
         return alpha_res
     
-    def keepzdt(self, alpha, startdi, enddi, ifsuspend):
+    def keepzdt(self, alpha, startdi, enddi, iszt, isdt):
         """Decide whether to drop the stocks stop trading
         """
-        iszdt = ifsuspend
+        iszdt = iszt + isdt
 
         # If the stock is not trading, set the alpha to nan 
         alpha[0][iszdt[startdi] == 1] = np.nan
@@ -73,11 +73,11 @@ class Simulator:
     ):
         alphas_cnt = len(alphas)
         self.actdays = basicfunc.get_datelist(startdate, enddate, 1, -1)
-        self.iszt = basicfunc.loadcache(self.actdays[0], enddate, "ISZT1", "BASEDATA")
+        self.iszt = basicfunc.loadcache(self.actdays[0], enddate, "ISZT", "BASEDATA")
         self.date_list = basicfunc.loadcache(self.actdays[0], enddate, "DAYS", "BASEDATA")
-        self.isdt = basicfunc.loadcache(self.actdays[0], enddate, "ISDT1", "BASEDATA")
-        self.vwap_ret = basicfunc.loadcache(self.actdays[0], enddate, vwap + "RET", "BASEDATA")
-        self.index_ret = basicfunc.loadcache(self.actdays[0], enddate, "I500RFET", "BASEDATA")
+        self.isdt = basicfunc.loadcache(self.actdays[0], enddate, "ISTP", "BASEDATA")
+        self.vwap_ret = basicfunc.loadcache(self.actdays[0], enddate, vwap + "RET", "BASEDATA") / 100
+        self.index_ret = basicfunc.loadcache(self.actdays[0], enddate, "IRE500", "BASEDATA")
         self.group = basicfunc.loadcache(self.actdays[0], enddate, "WIND01", "BASEDATA")
         self.startdi = self.date_list.tolist().index(self.actdays[1])
         self.enddi = self.startdi + len(self.actdays) - 1
@@ -90,7 +90,7 @@ class Simulator:
         results = [] # Store async for each alpha simulation result
         loglist = ""
 
-        pool = mp.Pool(process = self.cpu_num)
+        pool = mp.Pool(processes=self.cpu_num)
         for j in range(alphas_cnt):
             tempname = filename + "_" + colnames[j]
             tempflag = flag
@@ -153,7 +153,7 @@ class Simulator:
         Calculate the sum of the stocks that are actually traded everyday
         and the days that the traded stocks are less than 50
         """
-        dumpum = np.sum(~np.isnan(alpha[0 : enddi - startdi + 1]), axis=1)
+        dumpum = np.sum(~(alpha[0 : enddi - startdi + 1] == 0), axis=1)
         dumdays = np.where(dumpum <= 50)[0]
         for i in range(dumdays.shape[0]):
             logresult = (
@@ -201,11 +201,10 @@ class Simulator:
 
         holdpnl = np.r_[
             np.nansum(np.full((2, alpha.shape[1]), 0.0), axis=1),
-            np.nansum(np.minimum(alpha[1:histdays-1], alpha[0 : histdays - 2])*self.vwap_ret[startdi+2 : ], axis=1),
+            np.nansum(np.minimum(alpha[1:histdays-1], alpha[0 : histdays - 2])*self.vwap_ret[startdi+2 : enddi+1], axis=1),
         ]
 
-        tradepnl = np.nansum(retmatrix, axis=1) - holdpnl
-
+        tradepnl = np.nansum(retmatrix, axis=1) - holdpnl # The potential change cost
         trade_cap = np.around(
             np.r_[
                 np.nansum(np.abs(alpha[0])),
@@ -358,15 +357,15 @@ class Simulator:
         pnl_filname = Path(filename).absolute()
 
         if stockwise_export == "on":
-            alpha_filename = pnl_folder_path / filename.spilt("/")[-1].replace(
+            alpha_filename = pnl_folder_path / filename.split("/")[-1].replace(
                 "PNL", "ALPHA"
             )
 
-            ret_filname = pnl_folder_path / filename.spilt("/")[-1].replace(
+            ret_filname = pnl_folder_path / filename.split("/")[-1].replace(
                 "PNL", "RET"
             )
 
-            retmat_filename = pnl_folder_path / filename.spilt("/")[-1].replace(
+            retmat_filename = pnl_folder_path / filename.split("/")[-1].replace(
                 "PNL", "RETMAT"
             )
 
@@ -387,9 +386,9 @@ class Simulator:
                 index=self.bt_date[1:],
                 columns=self.tickers,
             )
-            alpha_csv.to_csv(f"{alpha_filename}.csv", format="%.6f")
-            ret_csv.to_csv(f"{ret_filname}.csv", format="%.6f")
-            retmat_csv.to_csv(f"{retmat_filename}.csv", format="%.6f")
+            alpha_csv.to_csv(f"{alpha_filename}.csv", float_format="%.6f")
+            ret_csv.to_csv(f"{ret_filname}.csv", float_format="%.6f")
+            retmat_csv.to_csv(f"{retmat_filename}.csv", float_format="%.6f")
 
         with open(f"{pnl_filname}.csv", "w+") as f:
             f.write(recordstr)
