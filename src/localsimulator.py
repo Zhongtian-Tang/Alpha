@@ -44,18 +44,18 @@ class Simulator:
 
         return alpha_res
     
-    def keepzdt(self, alpha, startdi, enddi, iszt, isdt):
+    def keepzdt(self, alpha, startdi, enddi, iszt, istp):
         """Decide whether to drop the stocks stop trading
         """
-        iszdt = iszt + isdt
+        isztp = iszt + istp
 
         # If the stock is not trading, set the alpha to nan 
-        alpha[0][iszdt[startdi] == 1] = np.nan
+        alpha[0][isztp[startdi] == 1] = np.nan
 
         for di in range(startdi + 1, enddi + 1):
             # If the stock is not trading, set the alpha to the previous day
-            alpha[di - startdi][iszdt[di] == 1] = alpha[di - startdi - 1][
-                iszdt[di] == 1
+            alpha[di - startdi][isztp[di] == 1] = alpha[di - startdi - 1][
+                isztp[di] == 1
             ]
         return alpha
     
@@ -75,7 +75,7 @@ class Simulator:
         self.actdays = basicfunc.get_datelist(startdate, enddate, 1, -1)
         self.iszt = basicfunc.loadcache(self.actdays[0], enddate, "ISZT", "BASEDATA")
         self.date_list = basicfunc.loadcache(self.actdays[0], enddate, "DAYS", "BASEDATA")
-        self.isdt = basicfunc.loadcache(self.actdays[0], enddate, "ISTP", "BASEDATA")
+        self.istp = basicfunc.loadcache(self.actdays[0], enddate, "ISTP", "BASEDATA")
         self.vwap_ret = basicfunc.loadcache(self.actdays[0], enddate, vwap + "RET", "BASEDATA") / 100
         self.index_ret = basicfunc.loadcache(self.actdays[0], enddate, "IRE500", "BASEDATA")
         self.group = basicfunc.loadcache(self.actdays[0], enddate, "WIND01", "BASEDATA")
@@ -135,8 +135,8 @@ class Simulator:
         histdays = enddi - startdi + 1
         self.bt_date = self.date_list[startdi : enddi + 1].copy()
 
-        raw_alpha = self.keepzdt(alpha.copy(), startdi, enddi, self.iszt, self.isdt)
-        alpha = self.keepzdt(alpha, startdi, enddi, self.iszt, self.isdt)
+        raw_alpha = self.keepzdt(alpha.copy(), startdi, enddi, self.iszt, self.istp)
+        alpha = self.keepzdt(alpha, startdi, enddi, self.iszt, self.istp)
         alpha = self.scalebook(alpha)
         palpha = alpha[0 : enddi - startdi + 1].copy()
         palpha[palpha <= 0] = np.nan
@@ -337,7 +337,7 @@ class Simulator:
                 f"{inx_ret[di - startdi]}"
             )
 
-            if "group_detail" == "on":
+            if group_detail == "on":
                 recordstr += (
                     f",{rankpnl[0][di - startdi]},"
                     f"{rankpnl[1][di - startdi]},"

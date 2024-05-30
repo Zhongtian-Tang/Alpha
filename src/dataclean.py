@@ -44,7 +44,7 @@ class Generator():
         end_date = str(year) + '-12-31'
         dailydata = fetcher.get_tradedate_data('jydb.dailydata', start_date, end_date,\
                                                'ashares', 'firstindustrycode', 'ifsuspend',\
-                                               'changepct', 'totalmv',\
+                                               'changepct', 'totalmv', 'avgprice',\
                                                'openprice', 'highprice', 'lowprice',\
                                                'closeprice', 'turnovervolume')\
                                                .sort_values(by=['tradedate', 'wind_code'])
@@ -68,13 +68,13 @@ class Generator():
         base_data_dict['HIGH'] = self.pivot_data(dailydata, 'highprice')
         base_data_dict['LOW'] = self.pivot_data(dailydata, 'lowprice')
         base_data_dict['CLOSE'] = self.pivot_data(dailydata, 'closeprice')
-        base_data_dict['VWAP'] = self.pivot_data(dstockdata, 'VWAP')
+        base_data_dict['VWAP'] = self.pivot_data(dailydata, 'avgprice')
         base_data_dict['CAP'] = self.pivot_data(dstockdata, 'VAL_FLOATMV')
         base_data_dict['ISZT'] = self.pivot_data(dstockdata, 'MAXUPORDOWN')
         base_data_dict['DAYS'] = pd.Series(dailydata['tradedate'].\
                                            unique()).astype(str).str.\
                                            replace('-','').astype(int).values
-        base_data_dict['STOCKS'] = np.array(dailydata['wind_code'].unique())
+        base_data_dict['STOCKS'] = np.sort(np.array(dailydata['wind_code'].unique()))
         base_data_dict['IRE500'] = indexdata[indexdata['wind_code'] == '000001.SH']['closeprice']
 
         return base_data_dict

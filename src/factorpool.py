@@ -1,3 +1,11 @@
+'''
+Author: Tangzhong-Tian 116010205@link.cuhk.edu.cn
+Date: 2024-05-23 16:47:43
+LastEditors: Tangzhong-Tian 116010205@link.cuhk.edu.cn
+LastEditTime: 2024-05-30 16:20:55
+FilePath: \Alpha\src\factorpool.py
+Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+'''
 import numpy as np
 import pandas as pd
 from factorbase import FactorBase
@@ -70,8 +78,8 @@ class FactorPool(FactorBase):
     def __init__(self):
         super(FactorPool, self).__init__()
         # Set Backtesting Date
-        self.start_date = "20140101"
-        self.end_date = "20221231"
+        self.start_date = "20200203"
+        self.end_date = "20231231"
 
         # preprocessing
         self.winsorize = False
@@ -82,6 +90,17 @@ class FactorPool(FactorBase):
         self.need_fields = [
             "OPEN",
             "CLOSE",
-            "TOP300",
+            "VOL",
+            "HIGH",
+            "VWAP"
         ]
+
+    def alpha_1(self):
+        close = self.need_data["CLOSE"]
+        vwap = self.need_data["VWAP"]
+        VC = vwap / close - 1
+        alpha = Operation.linear_decay(VC, 5) + 1/100000
+        return alpha
+
+
 

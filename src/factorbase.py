@@ -230,7 +230,7 @@ class FactorBase:
         for pnl in self.alpha_list:
             simfile_path = f"{pnlpath_ret}_{pnl}.csv"
             pnlfiles.append(simfile_path)
-            # summary.simsummary(simfile_path, group_detail=self.group_detail)
+            summary.simsummary(simfile_path, group_detail=self.group_detail)
 
 
     def execute_alphaflow(
