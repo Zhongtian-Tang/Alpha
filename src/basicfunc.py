@@ -41,42 +41,50 @@ def update_datelist(begT, endT, dback=0, dnext=0):
 
     beg_index = len(trading_days[trading_days < int(begT)]) - dback
     end_index = len(trading_days[trading_days <= int(endT)]) + dnext
-    np.save('../data/cache/BASEDATA/tradingdays.npy', trading_days[beg_index:end_index])
+    np.save('./data/cache/BASEDATA/tradingdays.npy', trading_days[beg_index:end_index])
     return 0
 
 def get_datelist(begT, endT, dback=0, dnext=0):
     """Get the date list based on the beginning and ending dates
     """
-    if os.path.exists('../data/cache/BASEDATA/tradingdays.npy'):
-        trading_days = np.load('../data/cache/BASEDATA/tradingdays.npy')
+    if os.path.exists('./data/cache/BASEDATA/tradingdays.npy'):
+        trading_days = np.load('./data/cache/BASEDATA/tradingdays.npy')
         beg_index = len(trading_days[trading_days < int(begT)]) - dback
         end_index = len(trading_days[trading_days <= int(endT)]) + dnext
         if end_index <= len(trading_days):
             return trading_days[beg_index:end_index]
     
+    else:
+        print("File Does not exist")
+        return 0
+    
+    """
     db_connection_str = "oracle+cx_oracle://rejy:jcFXLzL10@10.224.6.3:1522/?service_name=orcl"
     engine = create_engine(db_connection_str)
+    """
+
     """ Query the trading date list from the database """
-    sql = f"""
+    """sql = f'''
         SELECT TradingDate FROM JYDB.QT_TradingDayNew
         WHERE TradingDate >= to_date('{begT}', 'YYYYMMDD')
         AND TradingDate <= to_date('{endT}', 'YYYYMMDD')
         AND SecuMarket = 83 AND IfTradingDay = 1
         ORDER BY TradingDate
-        """
-    date_list = pd.read_sql(sql, engine)
-    date_list['tradingdate'] = date_list['tradingdate'].unique().astype(str)
-    trading_days = date_list['tradingdate'].replace('-', '', regex=True).astype(int)
+        '''
+    """
+    # date_list = pd.read_sql(sql, engine)
+    # date_list['tradingdate'] = date_list['tradingdate'].unique().astype(str)
+    # trading_days = date_list['tradingdate'].replace('-', '', regex=True).astype(int)
 
-    beg_index = len(trading_days[trading_days < int(begT)]) - dback
-    end_index = len(trading_days[trading_days <= int(endT)]) + dnext
+    # beg_index = len(trading_days[trading_days < int(begT)]) - dback
+    # end_index = len(trading_days[trading_days <= int(endT)]) + dnext
 
-    return trading_days[beg_index:end_index]
+    # return trading_days[beg_index:end_index]
 
 def get_symbols(startdate, enddate):
     """Get the symbols based on the beginning and ending dates
     """
-    newpath = '../data/cache/'
+    newpath = './data/cache/'
     years = np.arange(int(startdate) // 10000, int(enddate) // 10000 + 1)
     symbols = np.load(
         newpath + 'BASEDATA/' + str(years[len(years) - 1]) + '/STOCKS.npy'
@@ -134,7 +142,7 @@ def loadcache(startdate, enddate, dataitem, source='BASEDATA'):
         result: [[[100, 101], [NaN, NaN], [NaN, NaN]], [[200, 201], [NaN, NaN], [NaN, NaN]],
                   [[110, 111], [210, 211], [310, 311]], [[120, 121], [220, 221], [320, 321]]]
     """
-    newpath = "../data/cache/"
+    newpath = "./data/cache/"
     if source != "" and not source.endswith("/"):
         source += "/"
     years = np.arange(int(startdate) // 10000, int(enddate) // 10000 + 1)

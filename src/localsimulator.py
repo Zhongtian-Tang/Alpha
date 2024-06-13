@@ -10,12 +10,6 @@ import pandas as pd
 import xarray as xr
 
 logger = logging.getLogger(__name__)
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
 
 class Simulator:
     def __init__(self):
@@ -27,7 +21,7 @@ class Simulator:
         self.vwap_ret = None
         self.cpu_num = int(0.5 * mp.cpu_count())
 
-    def scalebook(self, alpha):
+    def scalebook(self, alpha, invert=False):
         """Scale the alpha to 10e6. This function accept a array and transform the alpha to real
         position value.
         """
@@ -41,6 +35,9 @@ class Simulator:
         # Use the buy and sell value to replace the original alpha value
         alpha_tmp = np.where(alpha>0, alpha_pos_value, alpha)
         alpha_res = np.where(alpha_tmp<0, alpha_neg_value, alpha_tmp)
+
+        if invert:
+            alpha_res = -1*alpha_res
 
         return alpha_res
     
@@ -70,6 +67,7 @@ class Simulator:
             group_detail="off",
             stockwise_export="off",
             vwap="VWAP",
+            invert=False,
     ):
         alphas_cnt = len(alphas)
         self.actdays = basicfunc.get_datelist(startdate, enddate, 1, -1)
@@ -77,10 +75,11 @@ class Simulator:
         self.date_list = basicfunc.loadcache(self.actdays[0], enddate, "DAYS", "BASEDATA")
         self.istp = basicfunc.loadcache(self.actdays[0], enddate, "ISTP", "BASEDATA")
         self.vwap_ret = basicfunc.loadcache(self.actdays[0], enddate, vwap + "RET", "BASEDATA") / 100
-        self.index_ret = basicfunc.loadcache(self.actdays[0], enddate, "IRE500", "BASEDATA")
+        self.index_ret = basicfunc.loadcache(self.actdays[0], enddate, "IRE500", "BASEDATA") / 100
         self.group = basicfunc.loadcache(self.actdays[0], enddate, "WIND01", "BASEDATA")
         self.startdi = self.date_list.tolist().index(self.actdays[1])
         self.enddi = self.startdi + len(self.actdays) - 1
+        self.invert = invert
 
         self.tickers = basicfunc.loadcache(
             self.actdays[0], self.actdays[-1], "STOCKS", "BASEDATA"
@@ -119,6 +118,7 @@ class Simulator:
                 loglist = f"Alpha {colnames[idx]} Exception: \n{msg}"
                 # loglist += " ".join(["\nAlpha", colnames[idx], "\n", msg])
             pnllist += [resstr]
+        logger.info("All alphas simulation finished.")
         return loglist
     
     def _simu(
@@ -137,7 +137,7 @@ class Simulator:
 
         raw_alpha = self.keepzdt(alpha.copy(), startdi, enddi, self.iszt, self.istp)
         alpha = self.keepzdt(alpha, startdi, enddi, self.iszt, self.istp)
-        alpha = self.scalebook(alpha)
+        alpha = self.scalebook(alpha, invert=self.invert)
         palpha = alpha[0 : enddi - startdi + 1].copy()
         palpha[palpha <= 0] = np.nan
         nalpha = alpha[0 : enddi - startdi + 1].copy()
@@ -196,7 +196,7 @@ class Simulator:
         # * Calculate the pnl and other metrics everyday
         retmatrix = np.r_[
             np.full((1, alpha.shape[1]), 0.0),
-            alpha[0, histdays - 1] * self.vwap_ret[startdi + 1 : enddi + 1],
+            alpha[0 : histdays - 1] * self.vwap_ret[startdi + 1 : enddi + 1],
         ]
 
         holdpnl = np.r_[
@@ -300,23 +300,23 @@ class Simulator:
                         np.nansum(
                             np.where(
                                 (temprank > lower_bound) & (temprank <= upper_bound),
-                                self.vwap_ret[startdi + 1 : enddi + 1],
+                                retmatrix[1:],
                                 0,
                             ),
                             axis=1,
                         ),
                     ],
-                    decimals=6,
+                    decimals=2,
                 )
                 rankpnl.append(pnl_per_group)
             
             recordstr += (
-                "date, pnl, longsize, shortsize, ret, holdpnl, tradepnl, poscov, negcov, pospnl, negpnl, IC, index_ret,"
-                + "rankpnl1, rankpnl2, rankpnl3, rankpnl4, rankpnl5, rankpnl6, rankpnl7, rankpnl8, rankpnl9, rankpnl10\n"
+                "date,pnl,longsize,shortsize,ret,holdpnl,tradepnl,poscov,negcov,pospnl,negpnl,IC,index_ret,"
+                + "rankpnl1,rankpnl2,rankpnl3,rankpnl4,rankpnl5,rankpnl6,rankpnl7,rankpnl8,rankpnl9,rankpnl10\n"
                 )
         else:
             recordstr += (
-                "date, pnl, longsize, shortsize, ret, holdpnl, tradepnl, poscov, negcov, pospnl, negpnl, IC, index_ret\n"
+                "date,pnl,longsize,shortsize,ret,holdpnl,tradepnl,poscov,negcov,pospnl,negpnl,IC,index_ret\n"
             )
 
         for di in range(startdi, enddi + 1):
@@ -394,6 +394,7 @@ class Simulator:
             f.write(recordstr)
         
         return j, logresult, recordstr
+    
 
         
 

@@ -1,9 +1,7 @@
 {
-    "esbonio.sphinx.confDir": "",
     "python.testing.pytestArgs": [
         "test"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
-    "editor.minimap.enabled": true
+    "python.testing.pytestEnabled": true
 }

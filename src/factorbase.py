@@ -10,8 +10,9 @@ import inspect
 import logging
 from collections import defaultdict
 
-logger = logging.getLogger(__name__)
 logging.basicConfig(
+    filename="New_Factor_Result.log",  # log file name
+    filemode= "a", # append mode
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
@@ -221,6 +222,7 @@ class FactorBase:
             1.0,
             self.group_detail,
             self.stockwise_export,
+            invert=self.invert,
         )
         if len(log_ret):
             logging.warning(log_ret)
@@ -230,7 +232,7 @@ class FactorBase:
         for pnl in self.alpha_list:
             simfile_path = f"{pnlpath_ret}_{pnl}.csv"
             pnlfiles.append(simfile_path)
-            summary.simsummary(simfile_path, group_detail=self.group_detail)
+            summary.simsummary(simfile_path, group_detail=self.group_detail, monthly="off")
 
 
     def execute_alphaflow(
@@ -238,7 +240,8 @@ class FactorBase:
             path: str = "./pnl",
             group_detail: str = "off",
             stockwise_export: str = "off",
-            prefix: str = "",           
+            prefix: str = "",
+            invert: bool = False,           
     ) -> None:
         """Execute workflow or pipeline related to alpha factors.
 
@@ -267,6 +270,7 @@ class FactorBase:
         self.stockwise_export = stockwise_export
         self.prefix = prefix
         self.path = path
+        self.invert = invert
         
         """Prepare base data."""
         self.get_constants()

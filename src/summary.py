@@ -5,6 +5,7 @@ import re
 import numpy as np
 import pandas as pd
 
+logger = logging.getLogger(__name__)
 
 def getindex(y, dates):
     """Calculate the index of year in the date list.
@@ -111,7 +112,7 @@ def getstats(
     long_all = np.nanmean(long)
     short_all = np.nanmean(short)
     perwin_all = np.nanmean(pnl > 0) # Percentage of winning days
-    turnover_all = np.nanmean(sh_trd /2000/10000) #TBD Need to be modified
+    turnover_all = np.nanmean(np.abs(sh_trd) /2000/10000) #TBD Need to be modified
     poscov_all = np.nanmean(poscov)
     negcov_all = np.nanmean(negcov)
     pospnl_all = np.nanmean(pospnl) / long_all * 244
@@ -242,7 +243,7 @@ def simsummary(filepath,
     match_result = re.search(r"PNL_(.*?)\.csv", filepath)
     if match_result:
         factor_str = match_result.group(1)
-    logging.info(f"Simsummary on  factor: {factor_str}")
+    logger.info(f"Simsummary on  factor: {factor_str}")
 
     if group_detail == "on":
         rank1pnl = []
@@ -363,7 +364,7 @@ def simsummary(filepath,
         + " "
         + "%win".ljust(5)
         + " "
-        + "bpmrgn".ljust(6)
+        + "bpmrgn".ljust(13)
         + " "
         + "fitness".ljust(7)
         + " "
@@ -425,14 +426,14 @@ def simsummary(filepath,
             if monthly == "on":
                 date_str = str(year) + "0101"
             else:
-                date_str = str(year) + "01"
+                date_str = str(year) + "0101"
         if year == year_e:
             date_str = date_str + "-" + str(enddate)
         else:
             if monthly == "on":
                 date_str = date_str + "-" + str(year) + "1231"
             else:
-                date_str = date_str + "-" + str(year) + "30"
+                date_str = date_str + "-" + str(year) + "1231"
 
         if summaryflag == "on":
             yearstats = getstats(
@@ -468,7 +469,7 @@ def simsummary(filepath,
                 + " "
                 + str(yearstats[5]).ljust(5)
                 + " "
-                + str(yearstats[13]).ljust(6)
+                + str(yearstats[13]).ljust(13)
                 + " "
                 + str(yearstats[12]).ljust(7)
                 + " "
@@ -569,7 +570,7 @@ def simsummary(filepath,
                 + str(yearstats[16]).ljust(7)
             )
             resultstr = resultstr +"\n" + date_str + "\n"
-        logging.info(f"\n{headerstr}\n{resultstr}")
+        logger.info(f"\n{headerstr}\n{resultstr}")
 
     if group_detail == "on":
         if len(dates) > 0:
@@ -602,7 +603,9 @@ def simsummary(filepath,
                 + str(str(yearstats2[9]) + "(" + str(yearstats2[19]) + ")").ljust(15)
             )
             resultstr2 = resultstr2 + date_str2 + "\n"
-        logging.info(f"\n{headerstr2}\n{resultstr2}")
+        logger.info(f"\n{headerstr2}\n{resultstr2}")
+    
+    return f"\n{headerstr}\n{resultstr}"
 
 
 

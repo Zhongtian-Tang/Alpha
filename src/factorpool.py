@@ -1,15 +1,9 @@
-'''
-Author: Tangzhong-Tian 116010205@link.cuhk.edu.cn
-Date: 2024-05-23 16:47:43
-LastEditors: Tangzhong-Tian 116010205@link.cuhk.edu.cn
-LastEditTime: 2024-05-30 16:20:55
-FilePath: \Alpha\src\factorpool.py
-Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
-'''
 import numpy as np
 import pandas as pd
+import os
 from factorbase import FactorBase
 from operation import Operation
+import basicfunc
 
 class FactorPool(FactorBase):
     """Class ``FactorPool`` inherites from ``FactorBase`` and represents a pool
@@ -78,7 +72,7 @@ class FactorPool(FactorBase):
     def __init__(self):
         super(FactorPool, self).__init__()
         # Set Backtesting Date
-        self.start_date = "20200203"
+        self.start_date = "20190303"
         self.end_date = "20231231"
 
         # preprocessing
@@ -92,15 +86,34 @@ class FactorPool(FactorBase):
             "CLOSE",
             "VOL",
             "HIGH",
+            "LOW",
             "VWAP"
         ]
 
     def alpha_1(self):
-        close = self.need_data["CLOSE"]
-        vwap = self.need_data["VWAP"]
-        VC = vwap / close - 1
-        alpha = Operation.linear_decay(VC, 5) + 1/100000
+        high = self.need_data["HIGH"]
+        low = self.need_data["LOW"]
+        alpha = Operation.rolling_std((high - low), 5)
         return alpha
+
+    def alpha_2(self):
+        high = self.need_data["HIGH"]
+        low = self.need_data["LOW"]
+        alpha = Operation.rolling_std((high - low), 10)
+        return alpha
+
+    def alpha_3(self):
+        close = self.need_data["CLOSE"]
+        alpha = Operation.rolling_std(close, 5)
+        return alpha
+        
+
+if __name__ == "__main__":
+    fpool = FactorPool()
+    fpool.execute_alphaflow(group_detail="on", prefix="votality", stockwise_export="off", invert=True)
+    print(f"Test range: {fpool.start_date} ~ {fpool.end_date}")
+    print(f"Test range: {fpool.actdays[0]} ~ {fpool.actdays[-1]}")
+    
 
 
 
